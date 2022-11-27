@@ -12,14 +12,13 @@ class SabaiState:
     # constructor
     # ###################################################################
     def __init__(self, arpString, dhcpdStaticString, dhcpdLeaseString):
-            #print(dhcpdStaticString)
-            #print(dhcpdLeaseString)
             # dhcpd static ----------------
             dhcpdStaticList = []
-            elements = dhcpdStaticString.split(">")
-            for element in elements:
-                if (len(element)>0):
-                    dhcpdStaticList.append(DhcpdStatic(element))
+            if (len(dhcpdStaticString)>0):
+                elements = dhcpdStaticString.split(">")
+                for element in elements:
+                    if (len(element)>0):
+                        dhcpdStaticList.append(DhcpdStatic(element))
 
             # wldev ----------------
             # todo
@@ -29,10 +28,11 @@ class SabaiState:
 
             # dhcpd lease ----------------
             dhcpdLeaseList = []
-            dhcpdLeaseString = dhcpdLeaseString.replace("'","\"")
-            jdata = json.loads(dhcpdLeaseString)
-            for element in jdata:
-                dhcpdLeaseList.append(DhcpdLease(element))
+            if (len(dhcpdLeaseString)>0):
+                dhcpdLeaseString = dhcpdLeaseString.replace("'","\"")
+                jdata = json.loads(dhcpdLeaseString)
+                for element in jdata:
+                    dhcpdLeaseList.append(DhcpdLease(element))
 
             # now create a giant SabaiState object
             states = []

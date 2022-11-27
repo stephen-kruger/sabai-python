@@ -16,12 +16,12 @@ class Sabai_api:
         deviceListOffset = "/sabai-gw.asp"
 
         #This sets up the https connection
-        connection = HTTPConnection(self.uri)
+        connection = HTTPConnection(self.uri,timeout=5)
         #then connect
         headers = { 'Authorization' : self.basic_auth(self.username, self.password) }
-        connection.request('GET', deviceListOffset, headers=headers)
 
         try:
+            connection.request('GET', deviceListOffset, headers=headers)
             #get the response back
             response = connection.getresponse()
             print("Status: {} and reason: {}".format(response.status, response.reason))
@@ -35,7 +35,10 @@ class Sabai_api:
             else:
                 print("something bad happened")
         except Exception as e:
-           print(e)
+           print("Failed to connect :"+str(e))
+           return SabaiState("","","")
+        finally:  # always close the connection
+            connection.close()
 
     # ###################################################################
     # Authorization token: we need to base 64 encode it
